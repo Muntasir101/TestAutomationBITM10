@@ -3,7 +3,6 @@ package com.Base;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -12,7 +11,7 @@ import org.openqa.selenium.safari.SafariDriver;
 
 public class BaseClass {
    public static WebDriver driver;
-   
+
     //Chrome
     public static void chrome_launch(){
         System.setProperty("webdriver.chrome.driver","./src/main/resources/Drivers/chromedriver.exe");
@@ -28,9 +27,7 @@ public class BaseClass {
         }
 
     }
-    public static void chrome_quit(){
-        driver.quit();
-    }
+    public static void chrome_quit(){driver.quit();}
 
     //Firefox
     public static void firefox_launch(){
