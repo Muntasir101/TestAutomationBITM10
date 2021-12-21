@@ -2,8 +2,10 @@ package com.BasicOperations;
 
 import com.Base.BaseClass;
 
+import java.io.IOException;
+
 public class TitleURL extends BaseClass {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         firefox_launch();
         open_URL("https://google.com");
         title_verification("Your Store");
@@ -29,5 +31,7 @@ public class TitleURL extends BaseClass {
         else
             System.out.println("Url Verification Failed !!! "+"Actual Url is: "+ActualUrl);
     }
+
+
 }
 

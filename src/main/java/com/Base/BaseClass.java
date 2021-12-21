@@ -1,16 +1,26 @@
 package com.Base;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 
 public class BaseClass {
    public static WebDriver driver;
+
+   public static String Firefox="Firefox";
+   public static String Chrome="Chrome";
 
     //Chrome
     public static void chrome_launch(){
@@ -68,7 +78,6 @@ public class BaseClass {
         }
         return driver;
     }
-
     public static void closeBrowser(String browser){
         if(browser.equalsIgnoreCase("chrome")){
             if(driver!=null){
@@ -107,7 +116,6 @@ public class BaseClass {
         }
 
     }
-
     public static void quitBrowser(String browser){
         if(browser.equalsIgnoreCase("chrome")){
             if(driver!=null){
@@ -146,7 +154,6 @@ public class BaseClass {
         }
 
     }
-
     public static void open_URL(String url){
         if(url==null){
             System.out.println("URL is NULL!!!!");
@@ -172,6 +179,20 @@ public class BaseClass {
     }
     public static void clickOnElementByLinkText(String LinkText){
         driver.findElement(By.linkText(LinkText)).click();
+    }
+
+    //Clear Text filed
+    public static void clearTextFieldByID(String id){
+        driver.findElement(By.id(id)).clear();
+    }
+    public static void clearTextFieldByXpath(String xpath){
+        driver.findElement(By.xpath(xpath)).clear();
+    }
+    public static void clearTextFieldByName(String name){
+        driver.findElement(By.name(name)).clear();
+    }
+    public static void clearTextFieldByCss(String css){
+        driver.findElement(By.cssSelector(css)).clear();
     }
 
     //Type on Element
@@ -213,5 +234,39 @@ public class BaseClass {
         Thread.sleep(MileSeconds);
     }
 
+    //Screenshots
+    public static void getVisiblePartScreenshot(String name) throws IOException {
+        //Screenshot Capture
+        File screenshotFile= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        //Store Image
+        FileUtils.copyFile(screenshotFile,new File("./src/main/ScreenshotImages/"+name+".png"),true);
+    }
+    public static void getFullPageScreenshot(String name) throws IOException {
+        //Screenshot Capture
+        Screenshot entirePage=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+
+        //Store Image
+        ImageIO.write(entirePage.getImage(),"PNG",new File("./src/main/ScreenshotImages/"+name+".png"));
+    }
+    public static void getElementScreenshot(String name) throws IOException {
+        WebElement SearchBox= driver.findElement(By.name("search"));
+        //Screenshot Capture
+        File screenshotFile= ((TakesScreenshot)SearchBox).getScreenshotAs(OutputType.FILE);
+        //Store Image
+        FileUtils.copyFile(screenshotFile,new File("./src/main/ScreenshotImages/"+name+".png"),true);
+    }
+    public static void getHighlightElementScreenshot(String name) throws IOException {
+        WebElement SearchBox= driver.findElement(By.name("search"));
+
+        JavascriptExecutor jse=(JavascriptExecutor)driver;
+
+        //Highlight Element with Red border 5px
+        jse.executeScript("arguments[0].style.border='5px solid red' ",SearchBox);
+
+        //Screenshot Capture
+        File screenshotFile= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        //Store Image
+        FileUtils.copyFile(screenshotFile,new File("./src/main/ScreenshotImages/HighlightSearchBox.jpeg"),true);
+    }
 
 }
